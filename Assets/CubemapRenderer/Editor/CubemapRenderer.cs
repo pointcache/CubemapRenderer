@@ -29,6 +29,12 @@ namespace Mogoson.CubemapRenderer
 
         [Tooltip("Should mipmaps be created?")]
         public bool mipmap = false;
+
+
+        private const string EditorPrefsRootPath = "mogoson.cubemaprenderer.";
+        private const string EditorPrefsFaceSizePath = EditorPrefsRootPath + "facesize";
+        private const string EditorPrefsMipmapPath = EditorPrefsRootPath + "mipmap";
+
         #endregion
 
         #region Private Method
@@ -41,6 +47,14 @@ namespace Mogoson.CubemapRenderer
         private void OnEnable()
         {
             renderCamera = Camera.main;
+            faceSize = EditorPrefs.GetInt(EditorPrefsFaceSizePath);
+            mipmap = EditorPrefs.GetInt(EditorPrefsMipmapPath) > 0 ? true : false;
+        }
+
+        private void OnDisable()
+        {
+            EditorPrefs.SetInt(EditorPrefsFaceSizePath, faceSize);
+            EditorPrefs.SetInt(EditorPrefsMipmapPath, mipmap ? 1 : 0);
         }
 
         private void OnWizardUpdate()
@@ -75,6 +89,8 @@ namespace Mogoson.CubemapRenderer
             AssetDatabase.Refresh();
             Selection.activeObject = newRenderCubemap;
         }
+
+
         #endregion
     }
 }
